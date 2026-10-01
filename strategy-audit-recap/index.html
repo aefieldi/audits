@@ -158,6 +158,14 @@ button[disabled]{opacity:.5;cursor:default}
 .nlab{display:block;font-family:"DM Mono",ui-monospace,Menlo,monospace;font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin:0 0 4px;cursor:pointer}
 .nstep .txt{color:var(--txt);font-size:15.5px;font-weight:400}
 .nstep.done .txt{text-decoration:line-through;color:var(--muted)}
+/* feedback ask, last card before the sign-off */
+.feedback{border-color:color-mix(in srgb,var(--mint) 45%,transparent)}
+.feedback .sec-title{margin-bottom:14px}
+.fb-body{color:var(--soft);font-size:16px;max-width:680px;margin:0 0 12px}
+.fb-links{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
+.fb-links a{border:1px solid var(--line2);border-radius:99px;padding:10px 18px;font-size:14.5px;font-weight:500;color:var(--txt)}
+.fb-links a:hover{border-color:var(--mint)}
+.fb-links a span{color:var(--muted);font-weight:300;margin-left:8px}
 .demo-banner{margin:0 0 30px;padding:12px 18px;border:1px dashed var(--line2);border-radius:14px;color:var(--soft);font-size:14px;max-width:720px}
 .replay.plain::before{display:none}
 span.replay{cursor:default}
@@ -289,6 +297,16 @@ span.replay{cursor:default}
     var stt=el('span','status'); stt.id='status';
     bar.appendChild(eb); bar.appendChild(sb); bar.appendChild(cx); bar.appendChild(stt); ns.appendChild(bar);
     if(!d.hide_next_steps) app.appendChild(wrapSec(ns));
+
+    // feedback ask: on every audit page by default. "feedback": false in the data turns it off.
+    if(d.feedback!==false){var fb=d.feedback||{}; var fc=card('feedback');
+      fc.appendChild(el('p','eyebrow',fb.eyebrow||'One small ask'));
+      head(fc,fb.title||'Was this helpful?');
+      fc.appendChild(el('p','fb-body',fb.body||'If it was, would you share your feedback with me? Post it in your stories, share it inside the community, send me a voice note or a Loom, or just type it out. Whatever you’re most comfortable with.'));
+      fc.appendChild(el('p','fb-body',fb.why||'I thrive off the feedback. I want these audits to be really, really valuable, and your words help me make them better and reach more people. I would love it.'));
+      var fl=el('div','fb-links');
+      (fb.links||[{label:'Share it in the community',url:'https://www.skool.com/amanda'},{label:'Tag or DM me on Instagram',url:'https://www.instagram.com/amandafielding.smith/',note:'@amandafielding.smith'}]).forEach(function(x){var a=link(x.label,x.url); if(x.note) a.appendChild(el('span',null,x.note)); fl.appendChild(a);});
+      fc.appendChild(fl); app.appendChild(wrapSec(fc));}
 
     app.appendChild(el('p','sign',d.signoff||'xoxo, Amanda 💜'));
     if(demo&&safeUrl(demo.cta_url)){var dc2=el('div','demo-cta'); var da=link(demo.cta_label||'Book your 1:1 Strategy Audit',demo.cta_url); da.classList.add('replay'); da.classList.add('plain'); dc2.appendChild(da); if(demo.cta_note) dc2.appendChild(el('span','demo-note',demo.cta_note)); app.appendChild(dc2);}
